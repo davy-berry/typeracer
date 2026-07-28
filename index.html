@@ -34,19 +34,17 @@
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="inputGroupSelect01">Select Difficulty</label>
                             <select class="form-select" id="inputGroupSelect01">
-                                <option selected>Choose</option>
                                 <option value="1">Easy</option>
                                 <option value="2">Medium</option>
-                                <option value="3">High</option>
+                                <option value="3">Hard</option>
                             </select>
                         </div>
-                        <h2>Typing Test</h2>
-                        <p>Start your typing challenge and measure your speed and accuracy in real time.</p>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default">
+                        <div class="test-area">
+                            <p class="lead">Test your typing speed by typing the text shown below:</p>
+                            <div class="mb-3 p-3 border" id="sample-text">
+                                <!-- sample text is inserted here using JS -->
+                            </div>
                         </div>
 
                         <div class="input-group">
@@ -77,6 +75,7 @@
     </footer>
 
     <!-- JavaScript -->
+
     <script src="assets/js/script.js"></script>
 
     <!-- Bootstrap JS -->
