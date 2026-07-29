@@ -33,10 +33,45 @@
             sampleTextElement.textContent = randomText;
         }
 
+        let startTime = null;
+        let endTime = null;
+
+        function startTest() {
+            startTime = Date.now();
+            endTime = null;
+            document.getElementById("start-button").disabled = true;
+            document.getElementById("stop-button").disabled = false;
+            document.getElementById("time").textContent = "0";
+        }
+
+        function stopTest() {
+            if (startTime === null) return;
+            endTime = Date.now();
+            const elapsedSeconds = (endTime - startTime) / 1000;
+            displayTestTime(elapsedSeconds);
+            document.getElementById("stop-button").disabled = true;
+        }
+
+        function resetTest() {
+            startTime = null;
+            endTime = null;
+            document.getElementById("start-button").disabled = false;
+            document.getElementById("stop-button").disabled = true;
+            document.getElementById("time").textContent = "0";
+        }
+
+        function displayTestTime(seconds) {
+            const formattedTime = seconds.toFixed(2);
+            document.getElementById("time").textContent = formattedTime;
+        }
+
         // Add event listener to difficulty selector
         document.addEventListener("DOMContentLoaded", function() {
             const difficultySelect = document.getElementById("inputGroupSelect01");
             difficultySelect.addEventListener("change", displaySampleText);
+            document.getElementById("start-button").addEventListener("click", startTest);
+            document.getElementById("stop-button").addEventListener("click", stopTest);
+            document.getElementById("reset-button").addEventListener("click", resetTest);
             // Display initial text on page load
             displaySampleText();
         });
