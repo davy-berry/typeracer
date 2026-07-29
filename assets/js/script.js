@@ -24,19 +24,26 @@
             return texts[Math.floor(Math.random() * texts.length)];
         }
 
-        // Function to display sample text when difficulty is selected
+        // Store the current sample text so WPM can be calculated later
         let currentSampleText = "";
 
+        // Function to update the sample text shown on the page
         function displaySampleText() {
             const difficulty = document.getElementById("inputGroupSelect01").value;
             const difficultyKey = Object.keys(sampleTexts)[difficulty - 1];
-            const sampleTextElement = document.getElementById("sample-text");
             const randomText = getRandomSampleText(difficultyKey);
             currentSampleText = randomText;
-            sampleTextElement.textContent = randomText;
             displaySelectedLevel(difficultyKey);
+            renderSampleText();
         }
 
+        function renderSampleText() {
+            const sampleTextElement = document.getElementById("sample-text");
+            const sampleWords = normalizeText(currentSampleText).split(" ").filter(Boolean);
+            sampleTextElement.innerHTML = sampleWords.map(word => ` <span class="pending-word">${word}</span>`).join(" ");
+        }
+
+        // Function to show the selected difficulty level in the results area
         function displaySelectedLevel(difficultyKey) {
             const levelText = difficultyKey
                 ? difficultyKey.charAt(0).toUpperCase() + difficultyKey.slice(1)
@@ -44,10 +51,31 @@
             document.getElementById("level").textContent = levelText;
         }
 
+        function highlightTypedWords() {
+            const typedText = document.getElementById("user-input").value;
+            const typedWords = normalizeText(typedText).split(" ").filter(Boolean);
+            const sampleTextElement = document.getElementById("sample-text");
+            const wordSpans = sampleTextElement.querySelectorAll("span");
+
+            wordSpans.forEach((span, index) => {
+                const sampleWord = span.textContent;
+                const typedWord = typedWords[index];
+                if (typedWord === undefined) {
+                    span.className = "pending-word";
+                } else if (typedWord === sampleWord) {
+                    span.className = "correct-word";
+                } else {
+                    span.className = "incorrect-word";
+                }
+            });
+        }
+
+        // Clean up whitespace so comparisons are consistent
         function normalizeText(text) {
             return text.trim().replace(/\s+/g, " ");
         }
 
+        // Count how many words the user typed correctly in the same order
         function calculateCorrectWords(typedText, sampleText) {
             const sampleWords = normalizeText(sampleText).split(" ").filter(Boolean);
             const typedWords = normalizeText(typedText).split(" ").filter(Boolean);
@@ -61,14 +89,17 @@
             return correctWords;
         }
 
+        // Convert correct words and elapsed time into words per minute
         function calculateWpm(correctWords, elapsedSeconds) {
             if (elapsedSeconds <= 0) return 0;
             return Math.round((correctWords / elapsedSeconds) * 60);
         }
 
+        // State variables for the test timer
         let startTime = null;
         let endTime = null;
 
+        // Start the typing test: record the time, clear input, and enable user typing
         function startTest() {
             startTime = Date.now();
             endTime = null;
@@ -81,6 +112,7 @@
             document.getElementById("time").textContent = "0";
         }
 
+        // Stop the test: calculate elapsed time, WPM, and lock the input area
         function stopTest() {
             if (startTime === null) return;
             endTime = Date.now();
@@ -96,6 +128,7 @@
             document.getElementById("user-input").disabled = true;
         }
 
+        // Reset the test state and results to the initial values
         function resetTest() {
             startTime = null;
             endTime = null;
@@ -108,6 +141,7 @@
             document.getElementById("wpm").textContent = "0";
         }
 
+        // Display the elapsed test time rounded to two decimal places
         function displayTestTime(seconds) {
             const formattedTime = seconds.toFixed(2);
             document.getElementById("time").textContent = formattedTime;
@@ -116,7 +150,9 @@
         // Add event listener to difficulty selector
         document.addEventListener("DOMContentLoaded", function() {
             const difficultySelect = document.getElementById("inputGroupSelect01");
+            const typingInput = document.getElementById("user-input");
             difficultySelect.addEventListener("change", displaySampleText);
+            typingInput.addEventListener("input", highlightTypedWords);
             document.getElementById("start-button").addEventListener("click", startTest);
             document.getElementById("stop-button").addEventListener("click", stopTest);
             document.getElementById("reset-button").addEventListener("click", resetTest);
