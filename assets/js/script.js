@@ -25,12 +25,45 @@
         }
 
         // Function to display sample text when difficulty is selected
+        let currentSampleText = "";
+
         function displaySampleText() {
             const difficulty = document.getElementById("inputGroupSelect01").value;
             const difficultyKey = Object.keys(sampleTexts)[difficulty - 1];
             const sampleTextElement = document.getElementById("sample-text");
             const randomText = getRandomSampleText(difficultyKey);
+            currentSampleText = randomText;
             sampleTextElement.textContent = randomText;
+            displaySelectedLevel(difficultyKey);
+        }
+
+        function displaySelectedLevel(difficultyKey) {
+            const levelText = difficultyKey
+                ? difficultyKey.charAt(0).toUpperCase() + difficultyKey.slice(1)
+                : "Unknown";
+            document.getElementById("level").textContent = levelText;
+        }
+
+        function normalizeText(text) {
+            return text.trim().replace(/\s+/g, " ");
+        }
+
+        function calculateCorrectWords(typedText, sampleText) {
+            const sampleWords = normalizeText(sampleText).split(" ").filter(Boolean);
+            const typedWords = normalizeText(typedText).split(" ").filter(Boolean);
+            let correctWords = 0;
+            const wordCount = Math.min(sampleWords.length, typedWords.length);
+            for (let i = 0; i < wordCount; i++) {
+                if (typedWords[i] === sampleWords[i]) {
+                    correctWords += 1;
+                }
+            }
+            return correctWords;
+        }
+
+        function calculateWpm(correctWords, elapsedSeconds) {
+            if (elapsedSeconds <= 0) return 0;
+            return Math.round((correctWords / elapsedSeconds) * 60);
         }
 
         let startTime = null;
@@ -53,6 +86,12 @@
             endTime = Date.now();
             const elapsedSeconds = (endTime - startTime) / 1000;
             displayTestTime(elapsedSeconds);
+
+            const typedText = document.getElementById("user-input").value;
+            const correctWords = calculateCorrectWords(typedText, currentSampleText);
+            const wpm = calculateWpm(correctWords, elapsedSeconds);
+            document.getElementById("wpm").textContent = wpm;
+
             document.getElementById("stop-button").disabled = true;
             document.getElementById("user-input").disabled = true;
         }
@@ -66,6 +105,7 @@
             document.getElementById("start-button").disabled = false;
             document.getElementById("stop-button").disabled = true;
             document.getElementById("time").textContent = "0";
+            document.getElementById("wpm").textContent = "0";
         }
 
         function displayTestTime(seconds) {
