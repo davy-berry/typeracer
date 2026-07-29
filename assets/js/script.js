@@ -108,6 +108,7 @@
             endTime = null;
             testRunning = true;
             document.getElementById("time").textContent = "0";
+            document.getElementById("reset-button").disabled = false;
         }
 
         // Stop the test: calculate elapsed time, WPM, and keep the text entered
@@ -126,17 +127,19 @@
         }
 
         // Reset the test state and results to the initial values
+        // and load a new sample sentence at the current difficulty level.
         function resetTest() {
             startTime = null;
             endTime = null;
             testRunning = false;
             const typingInput = document.getElementById("user-input");
             typingInput.value = "";
-            document.getElementById("start-button").disabled = false;
-            document.getElementById("stop-button").disabled = true;
+            typingInput.disabled = false;
+            document.getElementById("reset-button").disabled = true;
             document.getElementById("time").textContent = "0";
             document.getElementById("wpm").textContent = "0";
-            renderSampleText();
+            displaySampleText();
+            highlightTypedWords();
         }
 
         // Display the elapsed test time rounded to two decimal places
@@ -165,5 +168,6 @@
             document.getElementById("reset-button").addEventListener("click", resetTest);
             // Display initial text on page load
             displaySampleText();
+            document.getElementById("reset-button").disabled = true;
         });
     
