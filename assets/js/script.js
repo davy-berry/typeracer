@@ -39,6 +39,10 @@
         function startTest() {
             startTime = Date.now();
             endTime = null;
+            const typingInput = document.getElementById("user-input");
+            typingInput.value = "";
+            typingInput.disabled = false;
+            typingInput.focus();
             document.getElementById("start-button").disabled = true;
             document.getElementById("stop-button").disabled = false;
             document.getElementById("time").textContent = "0";
@@ -50,11 +54,15 @@
             const elapsedSeconds = (endTime - startTime) / 1000;
             displayTestTime(elapsedSeconds);
             document.getElementById("stop-button").disabled = true;
+            document.getElementById("user-input").disabled = true;
         }
 
         function resetTest() {
             startTime = null;
             endTime = null;
+            const typingInput = document.getElementById("user-input");
+            typingInput.value = "";
+            typingInput.disabled = true;
             document.getElementById("start-button").disabled = false;
             document.getElementById("stop-button").disabled = true;
             document.getElementById("time").textContent = "0";

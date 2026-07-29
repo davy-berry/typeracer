@@ -48,20 +48,28 @@
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-text">With textarea</span>
-                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                            <label class="form-label visually-hidden" for="user-input">Type Here</label>
+                            <textarea class="form-control" id="user-input" rows="5" placeholder="Click the start button to begin the test" aria-label="With textarea" disabled></textarea>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-outline-orange">Start</button>
-                            <button type="button" class="btn btn-outline-orange">Stop</button>
-                            <button type="button" class="btn btn-outline-orange">Retry</button>
+                            <button type="button" class="btn btn-outline-orange" id="start-button">Start</button>
+                            <button type="button" class="btn btn-outline-orange" id="stop-button" disabled>Stop</button>
+                            <button type="button" class="btn btn-outline-orange" id="reset-button">Retry</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
-                    <div id="results-area" class="p-4  rounded">
-                        <h2>Stats</h2>
-                        <p>View your results, progress, and personal bests after each run.</p>
+                    <div id="results-area" class="text-center p-4 rounded">
+                        <h2>Results</h2>
+                        <div>
+                            <p>Level: <span id="level">Easy</span></p>
+                        </div>
+                        <div>
+                            <p>Time: <span id="time">0</span>s</p>
+                        </div>
+                        <div>
+                            <p>WPM: <span id="wpm">0</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
