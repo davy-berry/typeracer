@@ -22,7 +22,7 @@
     <header class="text-center py-5">
         <div class="container">
             <h1 class="text-white mb-4">Type Racer</h1>
-            <button class="btn btn-light">Instructions</button>
+            <button class="btn btn-light" id="instructions" data-bs-toggle="modal" data-bs-target="#instructionsModal">Instructions</button>
         </div>
     </header>
 
@@ -79,6 +79,38 @@
             &copy; 2024 Type Racer. All rights reserved.
         </div>
     </footer>
+
+    <!-- Instructions Modal -->
+    <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="instructionsModalLabel">Typing Test Instructions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Welcome to Type Racer! Follow these steps to complete the typing test:</p>
+                    <ul>
+                        <li>Select a difficulty level from the dropdown. This determines the sample sentence you will type.</li>
+                        <li>Start typing in the text area. The test begins automatically when you type the first character.</li>
+                        <li>Words typed correctly will be highlighted in blue and incorrect words will be highlighted in red.</li>
+                        <li>When you have finished typing, press the <strong>Enter</strong> key to stop the test.</li>
+                        <li>The results panel will display your difficulty level, completion time, and WPM score.</li>
+                        <li>Click <strong>Retry</strong> to load a new sentence at the same difficulty and try again.</li>
+                    </ul>
+                    <p>Tips for a better performance:</p>
+                    <ul>
+                        <li>Keep your hands on the keyboard home row and avoid looking at the keyboard.</li>
+                        <li>Focus on accuracy first, then increase your speed.</li>
+                        <li>Take deep breaths and keep your posture comfortable.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
 
