@@ -99,22 +99,20 @@
         let startTime = null;
         let endTime = null;
 
-        // Start the typing test: record the time, clear input, and enable user typing
-        function startTest() {
+        // Begin the typing test when the user starts typing
+        let testRunning = false;
+
+        function beginTest() {
+            if (testRunning) return;
             startTime = Date.now();
             endTime = null;
-            const typingInput = document.getElementById("user-input");
-            typingInput.value = "";
-            typingInput.disabled = false;
-            typingInput.focus();
-            document.getElementById("start-button").disabled = true;
-            document.getElementById("stop-button").disabled = false;
+            testRunning = true;
             document.getElementById("time").textContent = "0";
         }
 
-        // Stop the test: calculate elapsed time, WPM, and lock the input area
+        // Stop the test: calculate elapsed time, WPM, and keep the text entered
         function stopTest() {
-            if (startTime === null) return;
+            if (!testRunning) return;
             endTime = Date.now();
             const elapsedSeconds = (endTime - startTime) / 1000;
             displayTestTime(elapsedSeconds);
@@ -124,21 +122,21 @@
             const wpm = calculateWpm(correctWords, elapsedSeconds);
             document.getElementById("wpm").textContent = wpm;
 
-            document.getElementById("stop-button").disabled = true;
-            document.getElementById("user-input").disabled = true;
+            testRunning = false;
         }
 
         // Reset the test state and results to the initial values
         function resetTest() {
             startTime = null;
             endTime = null;
+            testRunning = false;
             const typingInput = document.getElementById("user-input");
             typingInput.value = "";
-            typingInput.disabled = true;
             document.getElementById("start-button").disabled = false;
             document.getElementById("stop-button").disabled = true;
             document.getElementById("time").textContent = "0";
             document.getElementById("wpm").textContent = "0";
+            renderSampleText();
         }
 
         // Display the elapsed test time rounded to two decimal places
@@ -152,9 +150,18 @@
             const difficultySelect = document.getElementById("inputGroupSelect01");
             const typingInput = document.getElementById("user-input");
             difficultySelect.addEventListener("change", displaySampleText);
-            typingInput.addEventListener("input", highlightTypedWords);
-            document.getElementById("start-button").addEventListener("click", startTest);
-            document.getElementById("stop-button").addEventListener("click", stopTest);
+            typingInput.addEventListener("input", function() {
+                if (typingInput.value.trim().length > 0) {
+                    beginTest();
+                }
+                highlightTypedWords();
+            });
+            typingInput.addEventListener("keydown", function(event) {
+                if (event.key === "Enter" && testRunning) {
+                    event.preventDefault();
+                    stopTest();
+                }
+            });
             document.getElementById("reset-button").addEventListener("click", resetTest);
             // Display initial text on page load
             displaySampleText();
